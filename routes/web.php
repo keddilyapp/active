@@ -277,7 +277,6 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function () {
         Route::get('/wallet_recharge_success', 'wallet_recharge_success')->name('wallet_recharge_success')->middleware(['prevent-back-history']);
         Route::get('/profile', 'profile')->name('profile');
         Route::post('/new-user-verification', 'new_verify')->name('user.new.verify');
-        Route::post('/send-otp-update-email', 'sendEmailUpdateVerificationCode')->name('user.email.update.verify.code');
         Route::post('/new-user-email', 'update_email')->name('user.change.email');
         Route::post('/user/update-profile', 'userProfileUpdate')->name('user.profile.update');
     });
@@ -317,7 +316,6 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function ()
         Route::get('/digital-products/download/{id}', 'download')->name('digital-products.download');
 
         Route::get('/re-order/{id}', 're_order')->name('re_order');
-        Route::get('/purchase_history_filter', 'filterOrders')->name('purchase_history.filter');
     });
 
     // Wishlist

@@ -77,7 +77,7 @@ class CategoryUtility
 
     public static function create_initial_category($key)
     {
-        return true;
+		return true;
     }
 
     public static function move_level_up($id)

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Models\BusinessSetting;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\User;
@@ -138,16 +137,5 @@ class ShopController extends Controller
 
     public function show()
     {
-    }
-
-    public function categoriesWiseCommission(Request $request){
-        $sort_search =null;
-        $categories = Category::orderBy('order_level', 'desc');
-        if ($request->has('search')){
-            $sort_search = $request->search;
-            $categories = $categories->where('name', 'like', '%'.$sort_search.'%');
-        }
-        $categories = $categories->paginate(15);
-        return view('seller.categoryWise_commission', compact('categories'))->render();
     }
 }

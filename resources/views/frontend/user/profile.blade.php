@@ -144,7 +144,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-2">
-                    <label class="fs-14">{{ translate('Your New Email') }}</label>
+                    <label class="fs-14">{{ translate('Your Email') }}</label>
                 </div>
                 <div class="col-md-10">
                     <div class="input-group mb-3">
@@ -158,21 +158,8 @@
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row update-div">
-                <div class="col-md-2">
-                    <label class="fs-14">{{ translate('Verification Code') }}</label>
-                </div>
-                <div class="col-md-10">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control rounded-0" placeholder="{{ translate('Enter Your Verification Code')}}" name="code" value="" disabled />
-                        <div class="input-group-append">
-                           
-                        </div>
-                    </div>
                     <div class="form-group mb-0 text-right">
-                        <button type="submit" class="btn btn-primary rounded-0 w-150px mt-3" disabled >{{translate('Update Email')}}</button>
+                        <button type="submit" class="btn btn-primary rounded-0 w-150px mt-3">{{translate('Update Email')}}</button>
                     </div>
                 </div>
             </div>
@@ -196,7 +183,7 @@
         $(this).find('.default').addClass('d-none');
         var email = $("input[name=email]").val();
 
-        $.post('{{ route('user.email.update.verify.code') }}', {
+        $.post('{{ route('user.new.verify') }}', {
                 _token: '{{ csrf_token() }}',
                 email: email
             },
@@ -204,17 +191,12 @@
                 data = JSON.parse(data);
                 $('.default').removeClass('d-none');
                 $('.loading').addClass('d-none');
-                if (data.status == 2){
+                if (data.status == 2)
                     AIZ.plugins.notify('warning', data.message);
-                }
-                else if (data.status == 1){
+                else if (data.status == 1)
                     AIZ.plugins.notify('success', data.message);
-                    $('input[name="code"]').prop('disabled', false);
-                    $('button[type="submit"]').prop('disabled', false);
-                }
-                else{
+                else
                     AIZ.plugins.notify('danger', data.message);
-                }
             });
     });
 </script>

@@ -224,6 +224,10 @@ class BusinessSettingsController extends Controller
 
     public function google_firebase_update(Request $request)
     {
+        foreach ($request->types as $key => $type) {
+            $this->overWriteEnvFile($type, $request[$type]);
+        }
+
         $business_settings = BusinessSetting::where('type', 'google_firebase')->first();
 
         if ($request->has('google_firebase')) {

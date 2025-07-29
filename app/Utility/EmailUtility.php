@@ -230,64 +230,6 @@ class EmailUtility
 
     }
 
-
-     //Update Email OTP verification for customer Registration
-     public static function email_otp_verification_for_update_email($user, $userType, $verificationCode, $new_email){
-
-        $emailIdentifier =  'change_email_verification_code_'.$userType;
-        $emailTemplate = EmailTemplate::whereIdentifier($emailIdentifier)->first();
-
-        $emailSubject = $emailTemplate->subject;
-        $emailSubject = str_replace('[[store_name]]', get_setting('site_name'), $emailSubject);
-
-        $emailBody = $emailTemplate->default_text;
-        $emailBody = str_replace('[[store_name]]', get_setting('site_name'), $emailBody);
-        $emailBody = str_replace('[[seller_name]]', $user->name, $emailBody);
-        $emailBody = str_replace('[[customer_name]]', $user->name, $emailBody);
-        $emailBody = str_replace('[[code]]', $verificationCode, $emailBody);
-        $emailBody = str_replace('[[admin_email]]', get_admin()->email, $emailBody);
-        $emailBody = str_replace('[[new_email]]', $new_email, $emailBody);
-        $array['subject'] = $emailSubject;
-        $array['content'] = $emailBody;
-
-        Mail::to($user->email)->queue(new MailManager($array));
-    }
-
-
-    // Update Email Verification
-    public static function change_email_verification($user, $userType, $new_email){
-      
-        $emailIdentifier =  'email_update_verification_'.$userType;
-        $verification_code = encrypt($user->id);
-
-        // User Veridication code add
-        $user->new_email_verificiation_code = $verification_code;
-        $user->save();
-        $emailTemplate = EmailTemplate::whereIdentifier($emailIdentifier)->first();
-
-        $emailSubject = $emailTemplate->subject;
-        $emailSubject = str_replace('[[store_name]]', get_setting('site_name'), $emailSubject);
-        
-        $emailBody = $emailTemplate->default_text;
-        $link = route('email_change.callback') 
-        . '?new_email_verificiation_code=' . urlencode($verification_code) 
-        . '&email=' . urlencode($new_email);
-        $verifyButton = '<div style="display: flex; justify-content: center; padding-bottom:4px;">
-            <a href="'.$link.'" target="_blank" style="background: #0b60bd; text-decoration:none; padding: 1.4rem 2rem; color:#fff;border-radius: .3rem;">Click here</a>
-        </div>';
-        
-        $emailBody = str_replace('[[store_name]]', get_setting('site_name'), $emailBody);
-        $emailBody = str_replace('[[customer_name]]', $user->name, $emailBody);
-        $emailBody = str_replace('[[seller_name]]', $user->name, $emailBody);
-        $emailBody = str_replace('[[verify_email_button]]', $verifyButton, $emailBody);
-        $emailBody = str_replace('[[admin_email]]', get_admin()->email, $emailBody);
-
-        $array['subject'] = $emailSubject;
-        $array['content'] = $emailBody;
-        Mail::to($new_email)->queue(new MailManager($array));
-
-    }
-
     // Seller Payout emails
     public static function seller_payout($emailIdentifiers, $seller, $amount, $payment_method = null){
         $admin = get_admin();

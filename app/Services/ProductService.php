@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\SellerCategory;
-use App\Models\Shop;
 use App\Models\User;
 use App\Models\Wishlist;
 use App\Utility\ProductUtility;
@@ -394,34 +393,15 @@ class ProductService
         $products = Product::where('category_id', $data['category_id'])->where('auction_product', 0);
 
        if (in_array($auth_user->user_type, ['admin', 'staff'])) {
-            $admin_discount = $data['discount'];
-            if ($seller_product_discount == 1) {
-                $shops = Shop::all();
-                foreach ($shops as $shop) {
-                    $seller_cat = SellerCategory::where('category_id', $data['category_id'])
-                        ->where('seller_id', $shop->user_id)
-                        ->first();
-
-                    if ($seller_cat)  {
-                        // Update if record exists
-                        $seller_cat->update([
-                            'discount' => $admin_discount,
-                            'discount_start_date' => $admin_discount_start_date,
-                            'discount_end_date' => $admin_discount_end_date,
-                        ]);
-                    } else {
-                        // Create if not found
-                        SellerCategory::create([
-                            'category_id' => $data['category_id'],
-                            'seller_id' => $shop->user_id,
-                            'discount' => $admin_discount,
-                            'discount_start_date' => $admin_discount_start_date,
-                            'discount_end_date' => $admin_discount_end_date,
-                        ]);
-                    }
-                }
+                $admin_discount = $data['discount'];
+                if ($seller_product_discount == 1) {
+                    $seller_cats = SellerCategory::where('category_id', $data['category_id']);
+                    $seller_cats->update([
+                    'discount' => $admin_discount,
+                    'discount_start_date' => $admin_discount_start_date,
+                    'discount_end_date' => $admin_discount_end_date,
+                ]);
             }
-
             if ($seller_product_discount == 0) {
                 $products->where('user_id', $admin_id);
             }

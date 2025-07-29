@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AizUploadController;
-use App\Http\Controllers\Seller\DashboardController;
 
 //Upload
 Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user', 'prevent-back-history'], 'as' => 'seller.'], function () {
@@ -41,8 +40,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Seller', 'prefix' => 'seller'
         Route::get('/categories-wise-product-discount', 'categoriesWiseProductDiscount')->name('categories_wise_product_discount');
         Route::post('/set-product-discount', 'setProductDiscount')->name('set_product_discount');
     });
-
-
 
     // Product Bulk Upload
     Route::controller(ProductBulkUploadController::class)->group(function () {
@@ -108,7 +105,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Seller', 'prefix' => 'seller'
         Route::post('/shop/banner-update', 'bannerUpdate')->name('shop.banner.update');
         Route::get('/shop/apply-for-verification', 'verify_form')->name('shop.verify');
         Route::post('/shop/verification_info_store', 'verify_form_store')->name('shop.verify.store');
-        Route::get('/category-wise-commission', 'categoriesWiseCommission')->name('categories-wise-commission');
     });
 
     //Payments

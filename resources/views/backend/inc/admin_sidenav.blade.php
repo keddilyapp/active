@@ -1607,7 +1607,7 @@
                                 </g>
                             </svg>
                         </div>
-                        <span class="aiz-side-nav-text">{{translate('Payment Gateways')}}</span>
+                        <span class="aiz-side-nav-text">{{translate('Payment gateways')}}</span>
                         <span class="aiz-side-nav-arrow"></span>
                     </a>
                     <ul class="aiz-side-nav-list level-2">
@@ -1625,14 +1625,6 @@
                         <li class="aiz-side-nav-item">
                             <a href="{{route('cybersource_configuration')}}" class="aiz-side-nav-link">
                                 <span class="aiz-side-nav-text">{{translate('Cybersource Payment Gateway')}}</span>
-                                @if (env("DEMO_MODE") == "On")
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14.001" viewBox="0 0 16 14.001"
-                                    class="mx-2">
-                                    <path id="Union_49" data-name="Union 49"
-                                        d="M-19322,3342.5v-5a2.007,2.007,0,0,0-2-2v1.5a3,3,0,0,1-3,3h-4v-10h4a3,3,0,0,1,3,3v1.5a3,3,0,0,1,3,3v5a.506.506,0,0,1-.5.5A.5.5,0,0,1-19322,3342.5Zm-11-2V3339h-3a1,1,0,0,1-1-1,1,1,0,0,1,1-1h3v-7.5a.5.5,0,0,1,.5-.5.5.5,0,0,1,.5.5v11a.5.5,0,0,1-.5.5A.506.506,0,0,1-19333,3340.5Zm-3-7.5a1,1,0,0,1-1-1,1,1,0,0,1,1-1h3v2Z"
-                                        transform="translate(19337 -3329)" fill="#f51350" />
-                                </svg>
-                                @endif
                             </a>
                         </li>
                         @endif
@@ -1646,14 +1638,6 @@
                         <li class="aiz-side-nav-item">
                             <a href="{{route('paytm.index')}}" class="aiz-side-nav-link">
                                 <span class="aiz-side-nav-text">{{translate('Asian Payment Gateway')}}</span>
-                                @if (env("DEMO_MODE") == "On")
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14.001" viewBox="0 0 16 14.001"
-                                    class="mx-2">
-                                    <path id="Union_49" data-name="Union 49"
-                                        d="M-19322,3342.5v-5a2.007,2.007,0,0,0-2-2v1.5a3,3,0,0,1-3,3h-4v-10h4a3,3,0,0,1,3,3v1.5a3,3,0,0,1,3,3v5a.506.506,0,0,1-.5.5A.5.5,0,0,1-19322,3342.5Zm-11-2V3339h-3a1,1,0,0,1-1-1,1,1,0,0,1,1-1h3v-7.5a.5.5,0,0,1,.5-.5.5.5,0,0,1,.5.5v11a.5.5,0,0,1-.5.5A.506.506,0,0,1-19333,3340.5Zm-3-7.5a1,1,0,0,1-1-1,1,1,0,0,1,1-1h3v2Z"
-                                        transform="translate(19337 -3329)" fill="#f51350" />
-                                </svg>
-                                @endif
                             </a>
                         </li>
                         @endif
@@ -1664,14 +1648,6 @@
                          <li class="aiz-side-nav-item">
                             <a href="{{route('african_credentials.index')}}" class="aiz-side-nav-link">
                                 <span class="aiz-side-nav-text">{{translate('African Payment Gateway')}}</span>
-                                @if (env("DEMO_MODE") == "On")
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14.001" viewBox="0 0 16 14.001"
-                                    class="mx-2">
-                                    <path id="Union_49" data-name="Union 49"
-                                        d="M-19322,3342.5v-5a2.007,2.007,0,0,0-2-2v1.5a3,3,0,0,1-3,3h-4v-10h4a3,3,0,0,1,3,3v1.5a3,3,0,0,1,3,3v5a.506.506,0,0,1-.5.5A.5.5,0,0,1-19322,3342.5Zm-11-2V3339h-3a1,1,0,0,1-1-1,1,1,0,0,1,1-1h3v-7.5a.5.5,0,0,1,.5-.5.5.5,0,0,1,.5.5v11a.5.5,0,0,1-.5.5A.506.506,0,0,1-19333,3340.5Zm-3-7.5a1,1,0,0,1-1-1,1,1,0,0,1,1-1h3v2Z"
-                                        transform="translate(19337 -3329)" fill="#f51350" />
-                                </svg>
-                                @endif
                             </a>
                         </li>
                         @endcanany
