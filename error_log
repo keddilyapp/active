@@ -1,0 +1,2 @@
+[30-Jul-2025 22:36:03 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/keddily/public_html/active/install/database/seeds/TenantSeeder.php on line 3
+[30-Jul-2025 22:37:04 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/keddily/public_html/active/install/database/seeds/TenantSeeder.php on line 3

@@ -1,8 +1,9 @@
-
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\User; // Ensure this line is present
 use App\Models\BusinessSetting;
 
 class TenantSeeder extends Seeder

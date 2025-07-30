@@ -269,6 +269,3 @@ Route::controller(CompareController::class)->group(function () {
         return base_path('sitemap.xml');
     });
 });
-```
-
-This commit closes the tenant middleware group in web.php by adding a closing brace.
