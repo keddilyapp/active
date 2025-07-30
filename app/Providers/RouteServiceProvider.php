@@ -40,6 +40,8 @@ class RouteServiceProvider extends ServiceProvider
    */
   public function map()
   {
+    $this->mapCentralRoutes();
+    
     $this->mapApiRoutes();
 
     $this->mapApiSellerRoutes();
@@ -81,6 +83,20 @@ class RouteServiceProvider extends ServiceProvider
     // $this->mapInstallRoutes();
 
     // $this->mapUpdateRoutes();
+  }
+
+  /**
+   * Define the "central" routes for the application.
+   *
+   * These routes handle tenant management and registration.
+   *
+   * @return void
+   */
+  protected function mapCentralRoutes()
+  {
+    Route::middleware('web')
+       ->namespace($this->namespace)
+       ->group(base_path('routes/central.php'));
   }
 
   /**

@@ -188,6 +188,8 @@ return [
         App\Providers\ComposerServiceProvider::class,
 
         Spatie\Permission\PermissionServiceProvider::class,
+        
+        \Stancl\Tenancy\TenancyServiceProvider::class,
 
     ],
 
