@@ -741,9 +741,17 @@ class HomeController extends Controller
     {
         $email = $request->email;
         if (isUnique($email)) {
-            $this->send_email_change_verification_mail($request, $email);
-            flash(translate('A verification mail has been sent to the mail you provided us with.'))->success();
-            return back();
+            $customerVerification = RegistrationVerificationCode::where('code', $request->code);
+            $customerVerification = $customerVerification->where('email', $email);
+            $customerVerification = $customerVerification->first();
+            if ($customerVerification == null) {
+                flash(translate('Verification code do not matched'))->error();
+                return back();
+            } else {
+                $this->send_email_change_verification_mail($request, $email);
+                flash(translate('A verification mail has been sent to the new email address you provided.'))->success();
+                return back();
+            }
         }
 
         flash(translate('Email already exists!'))->warning();
@@ -756,9 +764,9 @@ class HomeController extends Controller
         $response['status'] = 0;
         $response['message'] = 'Unknown';
         try {
-            EmailUtility::email_verification($user, $user->user_type);
+            EmailUtility::change_email_verification($user, $user->user_type, $email);
             $response['status'] = 1;
-            $response['message'] = translate("Your verification mail has been Sent to your email.");
+            $response['message'] = translate("A verification mail has been sent to your new mail you provided us with.");
         } catch (\Exception $e) {
             $response['status'] = 0;
             $response['message'] = $e->getMessage();
@@ -981,4 +989,36 @@ class HomeController extends Controller
                 return view('auth.' . get_setting('authentication_layout_select') . '.user_registration', compact('customerVerification', 'email', 'phone'));
         }
     }
+
+    public function sendEmailUpdateVerificationCode(Request $request)
+    {
+        $user = auth()->user();
+        $phone = $request->phone != null ? '+' . $request->country_code . $request->phone : null;
+        $email = $request->email;
+        if (isUnique($email) == '0') {
+            $response['status'] = 2;
+            $response['message'] = translate('Email already exists!');
+            return json_encode($response);
+        }
+
+        $verificationCode = rand(100000, 999999);
+        $customerVerification = RegistrationVerificationCode::updateOrCreate(
+            ['email' => $email, 'phone' => $phone],
+            ['code' => $verificationCode]
+        );
+
+        try {
+            EmailUtility::email_otp_verification_for_update_email($user, $user->user_type, $verificationCode, $email);
+            $response['status'] = 1;
+            $response['message'] = translate("We've sent a verification code to your previous email address.");
+        } catch (\Exception $e) {
+            $response['status'] = 0;
+            $response['message'] = $e->getMessage();
+        }
+        return json_encode($response);
+
+
+
+    }
+
 }

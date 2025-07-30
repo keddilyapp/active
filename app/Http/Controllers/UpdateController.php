@@ -29,7 +29,7 @@ class UpdateController extends Controller
             return back();
         }
         $current_version= get_setting('current_version');
-        if (version_compare($current_version, '9.4', '<')) {
+        if (version_compare($current_version, '9.6', '<')) {
             flash(translate('Could not update. Please check the compatible version'))->error();
             return redirect('/');
         }
@@ -99,11 +99,11 @@ class UpdateController extends Controller
 
     public function step2()
     {
-        $versions = [ '9.4'=>'v940.sql', '9.5'=>'v950.sql', '9.6'=>'v960.sql', 
-        '9.6.1'=>'v961.sql', '9.7'=>'v970.sql','9.8'=>'v980.sql','9.8.1'=>'v981.sql' ,'9.9'=>'v990.sql','9.9.1'=>'v991.sql', '9.9.2'=>'v992.sql', '9.9.3'=>'v993.sql'];
+        $versions = [ '9.6'=>'v960.sql', 
+        '9.6.1'=>'v961.sql', '9.7'=>'v970.sql','9.8'=>'v980.sql','9.8.1'=>'v981.sql' ,'9.9'=>'v990.sql','9.9.1'=>'v991.sql', '9.9.2'=>'v992.sql', '9.9.3'=>'v993.sql', '9.9.4'=>'v994.sql', '9.9.5'=>'v995.sql'];
 
         $keys = array_keys($versions);
-        $current_version = (get_setting('current_version') != null) ? get_setting('current_version') : '9.4';
+        $current_version = (get_setting('current_version') != null) ? get_setting('current_version') : '9.6';
 
         if(array_search($current_version, $keys) == false){
             Artisan::call('view:clear');

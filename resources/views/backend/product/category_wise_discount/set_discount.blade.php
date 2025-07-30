@@ -96,7 +96,9 @@
                         </td>
                          @php
                             $start_date = $category->discount_start_date ? date('d-m-Y H:i:s', $category->discount_start_date) : null;
-                            $end_date   = $category->discount_end_date ? date('d-m-Y H:i:s', $category->adiscount_end_date) : null;
+                            $end_date   = $category->discount_end_date ? date('d-m-Y H:i:s', $category->discount_end_date) : null;
+
+                           
                         @endphp
                         <td>
                             <div class="input-group">

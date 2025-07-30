@@ -55,12 +55,14 @@
                                 <span class="aiz-side-nav-text">{{ translate('Product Bulk Upload') }}</span>
                             </a>
                         </li>
+                        @if (get_setting('digital_product_manage_by_seller') == 1)
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('seller.digitalproducts') }}"
                                 class="aiz-side-nav-link {{ areActiveRoutes(['seller.digitalproducts', 'seller.digitalproducts.create', 'seller.digitalproducts.edit']) }}">
                                 <span class="aiz-side-nav-text">{{ translate('Digital Products') }}</span>
                             </a>
                         </li>
+                        @endif
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('seller.product-reviews') }}"
                                 class="aiz-side-nav-link {{ areActiveRoutes(['seller.product-reviews', 'seller.detail-reviews']) }}">
@@ -339,7 +341,7 @@
                 <li class="aiz-side-nav-item">
                     <a href="{{ route('seller.commission-history.index') }}" class="aiz-side-nav-link">
                         <i class="las la-file-alt aiz-side-nav-icon"></i>
-                        <span class="aiz-side-nav-text">{{ translate('Commission History') }}</span>
+                        <span class="aiz-side-nav-text">{{ translate('Commission') }}</span>
                     </a>
                 </li>
 

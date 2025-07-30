@@ -292,8 +292,26 @@
     <!-- website popup -->
     @php
         $dynamic_popups = App\Models\DynamicPopup::where('status', 1)->orderBy('id', 'asc')->get();
+        use App\Models\Order;
+        use App\Models\OrderDetail;
     @endphp
     @foreach ($dynamic_popups as $key => $dynamic_popup)
+        @php
+        $showPopup = true;
+        if ($dynamic_popup->id == 100 ) {
+            if(auth()->user()){
+            $userOrderIds = Order::where('user_id', auth()->user()->id)->pluck('id');
+            $hasUnreviewed = OrderDetail::whereIn('order_id', $userOrderIds)
+            ->where('delivery_status', 'delivered')
+                            ->where('reviewed', 0)
+                            ->exists();
+            $showPopup = $hasUnreviewed;
+            }else{
+              $showPopup= false;  
+            }
+        }
+        @endphp
+
         @if($dynamic_popup->id == 1)
             <div class="modal website-popup removable-session d-none" data-key="website-popup" data-value="removed">
                 <div class="absolute-full bg-black opacity-60"></div>
@@ -326,6 +344,7 @@
                 </div>
             </div>
         @else
+            @if($showPopup)
             <div class="modal website-popup removable-session d-none" data-key="website-popup-{{ $dynamic_popup->id }}" data-value="removed">
                 <div class="absolute-full bg-black opacity-60"></div>
                 <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md mx-4 mx-md-auto">
@@ -338,7 +357,7 @@
                         <div class="pb-5 pt-4 px-3 px-md-2rem">
                             <h1 class="fs-30 fw-700 text-dark">{{ $dynamic_popup->title }}</h1>
                             <p class="fs-14 fw-400 mt-3 mb-4">{{ $dynamic_popup->summary }}</p>
-                            <a href="{{ $dynamic_popup->btn_link }}" class="btn btn-block mt-3 rounded-0 text-{{ $dynamic_popup->btn_text_color }}" style="background: {{ $dynamic_popup->btn_background_color }};">
+                            <a href="{{ $dynamic_popup->btn_link }}" class="btn btn-block mt-3 rounded-0 text-{{ $dynamic_popup->btn_text_color }} set-session" style="background: {{ $dynamic_popup->btn_background_color }};"data-key="website-popup-{{ $dynamic_popup->id }}" data-value="removed" data-toggle="remove-parent" data-parent=".website-popup">
                                 {{ $dynamic_popup->btn_text }}
                             </a>
                         </div>
@@ -348,6 +367,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         @endif
     @endforeach
 

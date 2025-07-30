@@ -51,6 +51,7 @@ use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\ClubPointController;
 use App\Http\Controllers\CommissionController;
 use AizPackages\ColorCodeConverter\Services\ColorCodeConverter;
+use App\Models\AppTranslation;
 use App\Models\CustomerPackagePayment;
 use App\Models\EmailTemplate;
 use App\Models\FlashDealProduct;
@@ -831,6 +832,15 @@ function translate($key, $lang = null, $addslashes = false)
         $translation_def->lang_key = $lang_key;
         $translation_def->lang_value = str_replace(array("\r", "\n", "\r\n"), "", $key);
         $translation_def->save();
+
+        if (env('DEMO_MODE') != 'On') {
+                $app_translation = new AppTranslation();
+                $app_translation->lang = 'en';
+                $app_translation->lang_key = $lang_key . '_ucf';
+                $app_translation->lang_value = str_replace(array("\r", "\n", "\r\n"), "", $key);
+                $app_translation->save();
+            }
+
         Cache::forget('translations-en');
     }
 

@@ -10,6 +10,7 @@ use App\Models\User;
 use Cache;
 use Storage;
 use Session;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class LanguageController extends Controller
 {
@@ -214,6 +215,63 @@ class LanguageController extends Controller
         }
         flash(translate('App Translations updated for ').$language->name)->success();
         return back();
+    }
+
+      public function sycnTranslations($id)
+    {
+        $language = Language::findOrFail($id);
+        $values = Translation::where('lang', $language->code)->get();
+        //dd( $values->count());
+        foreach ($values as $key => $value) {
+            AppTranslation::updateOrCreate(
+                ['lang' => $language->app_lang_code, 'lang_key' => $value->lang_key . '_ucf'],
+                ['lang_value' => $value->lang_value]
+            );
+        }
+        flash(translate('App Translations Sycned for ') . $language->name)->success();
+        return back();
+    }
+
+    public function googleTranslations(Request $request, $id)
+    {
+       try {
+            $language = Language::findOrFail($id);
+            $values = Translation::where('lang', 'en')->get();
+            $targetLang = $language->app_lang_code;
+
+            foreach ($values as $value) {
+                $existing = Translation::where('lang', $language->code)
+                    ->where('lang_key', $value->lang_key)
+                    ->first();
+
+                if (!$existing || empty($existing->lang_value)) {
+                    $tr = new GoogleTranslate();
+                    $translatedText = $tr->setSource('en')->setTarget($targetLang)->translate($value->lang_value);
+
+                    if (!$translatedText) {
+                        throw new \Exception("Translation failed for key: {$value->lang_key}");
+                    }
+
+                    Translation::updateOrCreate(
+                        ['lang' => $language->code, 'lang_key' => $value->lang_key],
+                        ['lang_value' => $translatedText]
+                    );
+                }
+            }
+
+            return response()->json([
+                'result' => true,
+                'message' => translate('All translations completed using Google Translate for ') . $language->name
+            ], 200);
+
+        } catch (\Throwable $e) {
+            // Log error optionally: Log::error($e);
+            return response()->json([
+                'result' => false,
+                'message' => translate('Something went wrong: ') . $e->getMessage()
+            ], 200);
+        }
+
     }
 
     public function exportARBFile($id){

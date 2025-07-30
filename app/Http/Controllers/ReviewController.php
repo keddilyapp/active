@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\Product;
@@ -117,6 +119,12 @@ class ReviewController extends Controller
             $review->created_at_is_custom = 1;
         }
         $review->save();
+        if ($authUser->user_type == 'customer') {
+            $orderIds = Order::where('user_id', $authUser->id)->pluck('id');
+            OrderDetail::whereIn('order_id', $orderIds)
+                ->where('product_id', $request->product_id)
+                ->update(['reviewed' => 1]);
+        }
         
         $product = Product::findOrFail($request->product_id);
         $reviewCount = Review::whereProductId($product->id)->whereStatus(1)->count();

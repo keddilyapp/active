@@ -11,7 +11,7 @@
     @php $authUser = auth()->user(); @endphp
     <div class="row">
         <div class="col-sm-6 col-md-6 col-xxl-3">
-            <div class="card shadow-none mb-4 bg-primary py-4">
+            <div class="card shadow-none mb-4 bg-primary ">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col">
@@ -32,6 +32,15 @@
                             </svg>
                         </div>
                     </div>
+
+                     <div class="d-flex justify-content-between mt-3">
+                        <a href="{{ route('seller.products.create') }}">
+                        <div class="d-flex align-items-center">
+                            <i class="las la-plus la-1x text-white"></i>
+                            <p class="fs-12 text-light my-2 ml-1">{{ translate('Add New Product') }}</p>
+                        </div>
+                        </a>
+                     </div>
                 </div>
             </div>
         </div>
@@ -57,7 +66,7 @@
                         </div> 
                     </div>
                     <div class="d-flex justify-content-between mt-3">
-                        <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center pt-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g id="Group_38928" data-name="Group 38928" transform="translate(-9435 -1195)">
                                     <g id="Layer_2" data-name="Layer 2" transform="translate(9435 1195)">
@@ -92,7 +101,7 @@
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-xxl-3">
-            <div class="card shadow-none mb-4 bg-primary py-4">
+            <div class="card shadow-none mb-4 bg-primary">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col">
@@ -144,11 +153,19 @@
                             </svg>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{{ route('seller.orders.index') }}">
+                        <div class="d-flex align-items-center">
+                            <i class="las la-eye la-1x text-white"></i>
+                            <p class="fs-12 text-light my-2 ml-1">{{ translate('View All Order') }}</p>
+                        </div>
+                        </a>
+                     </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-xxl-3">
-            <div class="card shadow-none mb-4 bg-primary py-4">
+            <div class="card shadow-none mb-4 bg-primary ">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col">
@@ -189,6 +206,13 @@
                             </svg>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{{ route('seller.orders.index') }}">
+                        <div class="d-flex align-items-center">
+                            <p class="fs-12 text-light my-2 ml-1"> {{ translate('Last Month') }}: {{ single_price($previous_month_sold_amount) }}</p>
+                        </div>
+                        </a>
+                     </div>
                 </div>
             </div>
         </div>
@@ -456,6 +480,66 @@
     </div>
 
     <div class="row">
+
+      @if(get_setting('vendor_commission_activation') == 1)
+            <div class="col-sm-6 col-md-6 col-lg-3 mb-4">
+                <div class="card shadow-none h-450px mb-0 h-100">
+                    <div class="card-body">
+                        <div class="card-title text-primary fs-16 fw-600">
+                            {{ translate('Commission Type & Rate') }}
+                        </div>
+                        <hr>
+                        <ul class="list-group">
+                            @if(get_setting('seller_commission_type') == 'fixed_rate')
+                            <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
+                            {{ translate('You are Under Fixed Commission. Commission Rate') }}
+                                <span class="">
+                                    {{ get_setting('vendor_commission') }} %
+                                </span>
+                            </li>
+                            @elseif(get_setting('seller_commission_type') == 'seller_based')
+                            <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
+                            {{ translate('You are Under Seller Based Commission. Commission Rate') }}
+                                <span class="">
+                                    {{ \App\Models\Shop::where('user_id', $authUser->id)->first()->commission_percentage }} %
+                                </span>
+                            </li>
+                            @elseif(get_setting('seller_commission_type') == 'category_based')
+                            <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
+                             {{ translate('You are Under Category Wise Commission Rate ') }}
+                                <span class="">
+                                    <a class="btn btn-primary btn-xs " href="{{ route('seller.categories-wise-commission') }}" >{{ translate('Details') }}</a>
+                                </span>
+                            </li>
+                            @endif
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        @else
+
+        <div class="col-sm-6 col-md-6 col-lg-3 mb-4">
+                <div class="card shadow-none h-450px mb-0 h-100">
+                    <div class="card-body">
+                        <div class="card-title text-primary fs-16 fw-600">
+                            {{ translate('Commission Type & Rate') }}
+                        </div>
+                        <hr>
+                        <ul class="list-group">
+                            
+                            <li class="d-flex justify-content-between align-items-center my-2 text-primary fs-13">
+                             {{ translate('Currently No Commeision System is Set by Admin') }}
+                            </li>
+                           
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        @endif
+        
+
         <div class="col-sm-6 col-md-6 col-lg-3">
             <a href="{{ route('seller.money_withdraw_requests.index') }}"
                 class="card mb-4 p-4 text-center bg-soft-primary h-180px">
@@ -479,23 +563,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <a href="{{ route('seller.products') }}" class="card mb-4 p-4 text-center h-180px">
-                <div class="fs-16 fw-600 text-primary">
-                    {{ translate('Add New Product') }}
-                </div>
-                <div class="m-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-                        <g id="Group_22724" data-name="Group 22724" transform="translate(-1284 -875)">
-                            <rect id="Rectangle_17080" data-name="Rectangle 17080" width="2" height="48" rx="1"
-                                transform="translate(1307 875)" fill="#2E294E" />
-                            <rect id="Rectangle_17081" data-name="Rectangle 17081" width="2" height="48" rx="1"
-                                transform="translate(1332 898) rotate(90)" fill="#2E294E" />
-                        </g>
-                    </svg>
-                </div>
-            </a>
-        </div>
+       
         <div class="col-sm-6 col-md-6 col-lg-3">
             <div class="card mb-4 p-4 text-center bg-soft-primary">
                 <div class="fs-16 fw-600 text-primary">
@@ -552,6 +620,7 @@
                 </a>
             </div>
         </div>
+      
     </div>
 
     <div class="card">

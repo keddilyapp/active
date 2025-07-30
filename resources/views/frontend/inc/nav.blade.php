@@ -90,6 +90,19 @@
                                 <a href="{{ route(get_setting('seller_registration_verify') === '1' ? 'shop-reg.verification' : 'shops.create') }}"
                                     class="text-secondary fs-12 pr-3 d-inline-block border-width-2 border-right">{{ translate('Become a Seller !') }}</a>
                             </li>
+
+                             @if (addon_is_activated('affiliate_system'))
+                            <!-- Dropdown Trigger -->
+                            <li class="list-inline-item dropdown py-2">
+                                <a class="text-secondary fs-12 dropdown-toggle d-inline-block border-width-2 border-right pr-3" href="#" role="button" id="affDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-chevron-down"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right py-0" aria-labelledby="affDropdown">
+                                    <a class="dropdown-item" href="{{ route('affiliate.apply') }}">{{ translate('Become an Affiliate') }}</a>
+                                </div>
+                            </li>
+                            @endif
+                            
                             {{-- <li class="list-inline-item mr-0 pl-0 py-2">
                                 <a href="{{ route('shops.create') }}"
                                     class="text-secondary fs-12 pr-3 d-inline-block border-width-2 border-right">{{ translate('Become a Seller !') }}</a>

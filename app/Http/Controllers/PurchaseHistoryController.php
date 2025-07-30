@@ -12,6 +12,7 @@ use App\Utility\CartUtility;
 use App\Utility\EmailUtility;
 use Cookie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseHistoryController extends Controller
 {
@@ -20,10 +21,26 @@ class PurchaseHistoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('orderDetails')->where('user_id', Auth::user()->id)->orderBy('code', 'desc')->paginate(10);
-        return view('frontend.user.purchase_history', compact('orders'));
+        // $query = Order::with('orderDetails')
+        //     ->where('user_id', Auth::id())
+        //     ->orderBy('code', 'desc');
+
+        // if (isset($request->delivery_status) && $request->delivery_status != '') {
+        //     $query->where('delivery_status', $request->delivery_status);
+        // }
+
+        // if (isset($request->to_review) && $request->to_review == 1) {
+        //     $query->whereHas('orderDetails', function ($q) {
+        //         $q->where('reviewed', 0)
+        //             ->where('delivery_status', 'delivered'); // Optional: ensure it's eligible for review
+        //     });
+        // }
+
+        // $orders = $query->paginate(10)->withQueryString();
+
+        return view('frontend.user.purchase_history');
     }
 
     public function digital_index()
@@ -43,7 +60,7 @@ class PurchaseHistoryController extends Controller
     public function purchase_history_details($id)
     {
         $order = Order::findOrFail(decrypt($id));
-        if(env('DEMO_MODE') != 'On'){            
+        if (env('DEMO_MODE') != 'On') {
             $order->delivery_viewed = 1;
             $order->payment_status_viewed = 1;
             $order->save();
@@ -97,7 +114,7 @@ class PurchaseHistoryController extends Controller
             }
 
             // Order paid notification to Customer, Seller, & Admin
-            EmailUtility::order_email($order, 'cancelled'); 
+            EmailUtility::order_email($order, 'cancelled');
 
             flash(translate('Order has been canceled successfully'))->success();
         } else {
@@ -188,5 +205,42 @@ class PurchaseHistoryController extends Controller
         }
 
         return redirect()->route('cart');
+    }
+
+    public function filterOrders(Request $request)
+    {
+        $tab = $request->tab;
+        $query = Order::with('orderDetails')
+            ->where('user_id', Auth::id())
+            ->orderBy('code', 'desc');
+
+        if ($tab && $tab !== 'all') {
+            match ($tab) {
+                'unpaid' => $query->where('payment_status', 'unpaid'),
+                'to_review' => $query->whereHas(
+                    'orderDetails',
+                    fn($q) =>
+                    $q->where('reviewed', 0)->where('delivery_status', 'delivered')
+                ),
+                default => $query->where('delivery_status', $tab),
+            };
+        }
+
+        $orders = $query->paginate(10)->withQueryString();
+
+        Log::info('Filtered Orders', [
+            'tab' => $tab,
+            'user_id' => Auth::id(),
+            'order_ids' => $orders->pluck('id')->toArray(),
+        ]);
+
+        $view = view(
+            $tab === 'to_review'
+                ? 'frontend.user.purchase_history_to_review'
+                : 'frontend.user.single_purchase_history',
+            compact('orders')
+        )->render();
+
+        return response()->json(['html' => $view]);
     }
 }
