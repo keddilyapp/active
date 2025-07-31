@@ -1,14 +1,30 @@
 
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
 // Variables
 @import 'variables';
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
+// Bootstrap - Import only what we need for better performance
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/utilities';
 
+// Add only the Bootstrap components you actually use
+// @import '~bootstrap/scss/buttons';
+// @import '~bootstrap/scss/forms';
+// @import '~bootstrap/scss/navbar';
+// @import '~bootstrap/scss/card';
+
+// Custom styles
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+// Performance: Use system fonts instead of web fonts
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
