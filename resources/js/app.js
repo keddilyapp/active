@@ -5,9 +5,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-
-window.Vue = require('vue');
+import './bootstrap';
+import { createApp } from 'vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,8 +14,11 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+// Use dynamic imports for better code splitting
+const app = createApp({});
 
-const app = new Vue({
-    el: '#app'
-});
+// Register components dynamically for code splitting
+app.component('example-component', () => import('./components/ExampleComponent.vue'));
+
+// Mount the app
+app.mount('#app');
